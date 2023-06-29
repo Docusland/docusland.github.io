@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Basic clicker</h1>
+    <button id="clicker">Click here</button>
+    <p>
+    <h2>Score :</h2>
+    <ul>
+        <li>Nb Cookies <span id="score">0</span></li>
+    </ul>
+
+    </p>
+    <h2>Multiplier</h2>
+    <button id="buy_multi">Buy it</button>
+    <p>
+    <ul>
+        <li>Multiplier cost <span id="multi_cost">5</span></li>
+        <li>Multiplier current power <span id="multi_power">1</span></li>
+    </ul>
+    </p>
+</body>
+<script>
+    class Clicker {
+        constructor() {
+            this.nb_cookies = 0
+            this.cookies_since_beginning = 0;
+            this.mulplier = {
+                nb_cookies: 1,
+                cost_for_next_level: 5
+            }
+
+        }
+        click() {
+            let nb_cookies_to_add = this.mulplier.nb_cookies
+            this.nb_cookies += nb_cookies_to_add
+            this.cookies_since_beginning += nb_cookies_to_add
+            this.refresh()
+        }
+        buy_multiplier() {
+            if (this.nb_cookies >= this.mulplier.cost_for_next_level) {
+                this.nb_cookies -= this.mulplier.cost_for_next_level
+                this.mulplier.nb_cookies += 1
+                this.mulplier.cost_for_next_level *= 2
+            } else {
+                console.error("Not enough cookies !")
+            }
+            this.refresh()
+        }
+        refresh() {
+            document.querySelector('#score').innerText = this.nb_cookies
+            document.querySelector('#multi_cost').innerText = this.mulplier.cost_for_next_level
+            document.querySelector('#multi_power').innerText = this.mulplier.nb_cookies
+
+        }
+
+
+    }
+
+    const game = new Clicker()
+
+    // Add events
+    document.querySelector('#clicker').addEventListener("click", () => game.click())
+    document.querySelector('#buy_multi').addEventListener("click", () => game.buy_multiplier())
+
+
+
+    /**
+     * Axes d'amélioration
+     *  - Ajouter des sons au click + effet
+     *  - Ajout de l'autoclicker et optimisation
+     *  - Ajouter un cookie doré, qui spawn aléatoirement tous les x temps à un endroit dans l'écran. 
+     *      - Frénésie : augmente le nb_cookier_per_second / augmente le nb_cookier_per_click
+     *  - Déclencher une pluie de cookies lorsqu'on atteint un nb de cookie depuis le début de la partie
+     *  - Pouvoir sauvegegarder son avancement. (localstorage)
+     *  - Changer le curseur de souris
+     *  - Générer des textes aléatoires en fonction de notre niveau
+     * */
+</script>
+
+</html>
